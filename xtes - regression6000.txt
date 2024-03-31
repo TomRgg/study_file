@@ -1,0 +1,161 @@
+6001
+xtest_tee_test_6001
+Test TEE_CreatePersistentObject
+storage_ta_uuid:b689f2a78adf477a9f9932e90c0ad0a2
+
+res = TEE_CreatePersistentObject();
+TEE_CloseAndDeletePersistentObject1(o);
+主要测试CreatePersistent、删除
+Persistent - TEE_CreatePersistentObject API测试
+
+6002
+Test TEE_OpenPersistentObject
+storage_ta_uuid:b689f2a78adf477a9f9932e90c0ad0a2
+
+res = TEE_CreatePersistentObject();
+TEE_CloseObject((TEE_ObjectHandle)(uintptr_t)params[0].value.a);
+res = TEE_OpenPersistentObject(params[2].value.a,object_id, params[0].memref.size,params[1].value.a, &o);
+TEE_CloseObject((TEE_ObjectHandle)(uintptr_t)params[0].value.a);
+TEE_CloseAndDeletePersistentObject1(o);
+主要测试OpenPersistentObject、CloseObject
+Persistent - TEE_OpenPersistentObject API测试
+
+6003
+Test TEE_ReadObjectData
+storage_ta_uuid:b689f2a78adf477a9f9932e90c0ad0a2
+
+res = TEE_CreatePersistentObject();
+res = TEE_OpenPersistentObject(params[2].value.a,object_id, params[0].memref.size,params[1].value.a, &o);
+res = TEE_ReadObjectData(o, b0, params[0].memref.size, &sz);
+TEE_CloseAndDeletePersistentObject1(o);
+主要测试TEE_ReadObjectData
+Persistent - TEE_ReadObjectData API测试
+
+6004
+Test TEE_WriteObjectData
+storage_ta_uuid:b689f2a78adf477a9f9932e90c0ad0a2
+
+res = TEE_CreatePersistentObject();
+res = TEE_OpenPersistentObject();
+res = TEE_WriteObjectData(o, b0, params[0].memref.size);
+TEE_CloseObject
+res = TEE_OpenPersistentObject();
+res = TEE_ReadObjectData(o, b0, params[0].memref.size, &sz);
+TEE_CloseAndDeletePersistentObject1(o);
+主要测试TEE_WriteObjectData、TEE_ReadObjectData
+Persistent - TEE_WriteObjectData API测试
+
+
+6005
+Test TEE_SeekObjectData
+storage_ta_uuid:b689f2a78adf477a9f9932e90c0ad0a2
+
+TEE_SeekObjectData
+主要测试TEE_SeekObjectData，通过TEE_ReadObjectData对比结果
+Persistent - TEE_SeekObjectData API测试
+
+6006
+Test TEE_CloseAndDeletePersistentObject
+storage_ta_uuid:b689f2a78adf477a9f9932e90c0ad0a2
+
+TEE_CloseAndDeletePersistentObject1(o);
+主要测试TEE_CloseAndDeletePersistentObject1(o);
+Persistent - TEE_CloseAndDeletePersistentObject API测试
+
+6007
+Test TEE_TruncateObjectData
+- Test truncate file length
+- Test extend file length
+- Test file hole
+TEE_TruncateObjectData（size参数变化）API测试
+
+6008
+Test TEE_RenamePersistentObject
+TEE_RenamePersistentObject API测试
+
+6009
+Test TEE Internal API Persistent Object Enumeration Functions
+TEE_AllocatePersistentObjectEnumerator、TEE_StartPersistentObjectEnumerator、TEE_GetNextPersistentObject 持久性对象的枚举API测试
+
+6010
+Test Storage
+- CreatePersistentObject AccessConflict
+TEE_CreatePersistentObject 重复创建相同的file，预期结果TEEC_ERROR_ACCESS_CONFLICT
+- RestrictObjectUsage Panic
+TEE_RestrictObjectUsage1 异常测试，预期结果TEE_ERROR_TARGET_DEAD
+- SeekObjectData BadHandle
+TEE_SeekObjectData 参数TEE_ObjectHandle非法测试，预期结果TEE_ERROR_TARGET_DEAD
+- SeekObjectData NotPersist
+TEE_SeekObjectData 参数TEE_ObjectHandle非法测试，预期结果TEE_ERROR_TARGET_DEAD
+- SeekWriteRead
+TEE_SeekObjectData、TEE_WriteObjectData、TEE_ReadObjectData API综合测试
+- Rename Access Conflict
+TEE_RenamePersistentObject 参数newObjectID已存在的非法测试，预期结果TEE_ERROR_ACCESS_CONFLICT
+- AllocPersistentObjectEnumerator + ResetPersistentObjectEnumerator
+AllocPersistentObjectEnumerator、ResetPersistentObjectEnumerator异常测试，预期结果TEE_ERROR_ITEM_NOT_FOUND
+- RenamePersistent ReadWrite
+- Close Free Reset Null
+Storage API综合测试
+
+6012
+Test TEE GP TTA DS init objects
+TEE_CreatePersistentObject ，参数TEE_DATA_FLAG_OVERWRITE测试
+
+6013
+Key usage in Persistent objects
+TEE_AllocateTransientObject、TEE_GenerateKey 生成AES密钥对象
+TEE_GetObjectInfo1 获取密钥对象的信息
+TEE_CreatePersistentObject 将上面生成的transient_key作为参数生成一个持久化对象
+TEE_GetObjectInfo1 获取持久化对象的信息，然后将2个对象信息进行校验
+密钥对相关API测试
+
+6014
+Loop on Persistent objects
+循环TEE_CreatePersistentObject、TEE_CloseAndDeletePersistentObject1 API测试
+
+6015
+Storage isolation
+TA1执行TEE_CreatePersistentObject 、 TA2执行TEE_OpenPersistentObject测试
+
+6016
+Storage concurency
+多线程 PersistentObject create、open、write、read delete测试
+
+6017
+Test Persistent objects info
+TEE_GetObjectInfo1 API测试
+
+6018
+Large object
+大对象num_blocks、block[32 * 1024]的PersistentObject create、open、write、read delete测试
+
+6019
+Storage independence
+TA1、TA2分别执行PersistentObject 的create、open、read测试
+
+6020
+Object IDs in SHM (negative)
+PersistentObject的create、close测试
+使用与CA共享内存的object_id，执行PersistentObject的create异常测试，预期结果TEE_ERROR_TARGET_DEAD
+
+6021
+Modify and check persistent object usage
+PersistentObject的TEE_RestrictObjectUsage1测试
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
